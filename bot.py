@@ -6,7 +6,11 @@ from aiogram.types import ParseMode, InputMediaPhoto, InputMediaVideo, ChatActio
 
 import json
 import time
+
 from config import TOKEN, GREETING, ADMIN
+import keyboards as kb
+
+
 
 
 
@@ -27,9 +31,12 @@ def getSize(message):
     size = int(fileinfo["document"]["file_size"])
     return size
 
+
+
+
 @dp.message_handler(commands=['start'])
 async def process_start_comand(message: types.Message):
-    await message.reply(GREETING)
+    await message.reply(GREETING, reply_markup=kb.greet_kb)
 
 @dp.message_handler(commands=['help'])
 async def process_help_command(message: types.Message):
