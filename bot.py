@@ -9,6 +9,8 @@ import time
 
 from config import TOKEN, GREETING, ADMIN
 import keyboards as kb
+from db import add_user_to_db
+
 
 
 
@@ -37,12 +39,13 @@ def getSize(message):
 @dp.message_handler(commands=['start'])
 async def process_start_comand(message: types.Message):
     await message.reply(GREETING, reply_markup=kb.greet_kb)
+    add_user_to_db(message)
 
 @dp.message_handler(commands=['help'])
 async def process_help_command(message: types.Message):
     msg = text(bold('Я могу ответить на следующие команды:'),
                '/print', '/copy', '/scan', sep='\n')
-    await message.reply(msg, parse_mode=ParseMode.MARKDOWN)
+    await message.reply(msg, parse_mode=ParseMode.MARKDOWN, reply_markup=kb.greet_kb)
 
 @dp.message_handler(commands=['print'])
 async def process_print_comand(message: types.Message):
@@ -50,11 +53,11 @@ async def process_print_comand(message: types.Message):
 
 @dp.message_handler(commands=['copy'])
 async def process_copy_comand(message: types.Message):
-    await message.reply('Для того чтобы сделать копию свяжитесь с оператором')
+    await message.reply('Для того чтобы сделать копию свяжитесь с оператором: ' + ADMIN)
 
 @dp.message_handler(commands=['scan'])
 async def process_scan_comand(message: types.Message):
-    await message.reply('Для того чтобы сделать скан свяжитесь с оператором')
+    await message.reply('Для того чтобы сделать скан свяжитесь с оператором: ' + ADMIN)
 
 @dp.message_handler(content_types=ContentType.DOCUMENT)
 async def process_recive_comand(message: types.Message):
@@ -87,7 +90,7 @@ async def process_recive5_comand(message: types.Message):
 
 @dp.message_handler()
 async def echo_message(msg: types.Message):
-    await bot.send_message(msg.from_user.id, 'ой всё, либо покупай либо гуляй :grinning:')
+    await bot.send_message(msg.from_user.id, 'Мне некогда болтать...')
 
 
 if __name__ == '__main__':
